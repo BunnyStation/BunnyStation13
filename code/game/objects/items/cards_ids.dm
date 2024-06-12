@@ -825,8 +825,9 @@
 /// Updates the name based on the card's vars and state.
 /obj/item/card/id/proc/update_label()
 	var/name_string = registered_name ? "[registered_name]'s ID Card" : initial(name)
-	var/assignment_string
+	var/assignment_string = get_job_title() // BUBBER EDIT: Adds a new proc which is used to get a job title
 
+	/* BUBBER EDIT: Moved to `get_job_title()`
 	if(is_intern)
 		if(assignment)
 			assignment_string = trim?.intern_alt_name || "Intern [assignment]"
@@ -834,12 +835,13 @@
 			assignment_string = "Intern"
 	else
 		assignment_string = assignment
+	*/
 
 	name = "[name_string] ([assignment_string])"
 
 /// Returns the trim assignment name.
 /obj/item/card/id/proc/get_trim_assignment()
-	return trim?.assignment || assignment
+	return get_job_title() // BUBBER EDIT: uses the `get_job_title()` proc instead
 
 /// Returns the trim sechud icon state.
 /obj/item/card/id/proc/get_trim_sechud_icon_state()
