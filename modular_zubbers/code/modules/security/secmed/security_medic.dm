@@ -24,6 +24,7 @@
 
 	display_order = JOB_DISPLAY_ORDER_SECURITY_MEDIC
 	bounty_types = CIV_JOB_SEC
+	bounty_types = CIV_JOB_MED
 	departments_list = list(
 		/datum/job_department/security,
 		/datum/job_department/medical,
