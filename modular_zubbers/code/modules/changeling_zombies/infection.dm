@@ -99,6 +99,15 @@ GLOBAL_VAR_INIT(changeling_zombies_detected,FALSE)
 
 	var/mob/living/carbon/human/host = parent
 
+	if(SPT_PROB(2, seconds_per_tick) && istype(host.loc,/obj/machinery/cryo_cell))
+		var/obj/machinery/cryo_cell/gay_baby_jail = host.loc
+		if(gay_baby_jail.on)
+			gay_baby_jail.visible_message(
+				span_danger("Something thrashes inside [gay_baby_jail]!")
+			)
+			gay_baby_jail.Shake()
+			gay_baby_jail.take_damage(10,armour_penetration=100)
+
 	if(zombified)
 		var/list/healing_options = list()
 		if(host.getBruteLoss() > 0)
@@ -135,6 +144,8 @@ GLOBAL_VAR_INIT(changeling_zombies_detected,FALSE)
 				can_cure = FALSE
 			else
 				var/damage_multiplier = max(1, (world.time - infection_timestamp) / (1 MINUTES) )
+				if(can_cure)
+					damage_multiplier = min(2,damage_multiplier) //Caps it to double.
 				if(host.stat && host.stat == DEAD)
 					host.adjustToxLoss(round(CHANGELING_ZOMBIE_TOXINS_PER_SECOND_DEAD * seconds_per_tick * damage_multiplier,0.1))
 				else
