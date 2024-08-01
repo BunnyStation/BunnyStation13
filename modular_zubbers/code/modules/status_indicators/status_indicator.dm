@@ -125,10 +125,10 @@ GLOBAL_LIST_INIT(potential_indicators, list(
 	if(get_status_indicator(prospective_indicator)) // No duplicates, please.
 		return
 
-	prospective_indicator = GLOB.potential_indicators[prospective_indicator]
-	prospective_indicator.loc = src
-	LAZYADD(status_indicators, prospective_indicator)
-	handle_status_indicators(prospective_indicator)
+	var/image/new_indicator = GLOB.potential_indicators[prospective_indicator]
+
+	LAZYADD(status_indicators, new_indicator)
+	handle_status_indicators()
 
 /// Similar to add_status_indicator() but removes it instead, and nulls the list if it becomes empty as a result.
 /datum/component/status_indicator/proc/remove_status_indicator(image/prospective_indicator)
@@ -136,7 +136,7 @@ GLOBAL_LIST_INIT(potential_indicators, list(
 
 	attached_mob.cut_overlay(prospective_indicator)
 	LAZYREMOVE(status_indicators, prospective_indicator)
-	handle_status_indicators(prospective_indicator)
+	handle_status_indicators()
 
 /// Finds a status indicator on a mob.
 /datum/component/status_indicator/proc/get_status_indicator(image/prospective_indicator)
@@ -149,8 +149,7 @@ GLOBAL_LIST_INIT(potential_indicators, list(
 /// Cuts all the indicators on a mob in a loop.
 /datum/component/status_indicator/proc/cut_indicators_overlays()
 	SIGNAL_HANDLER
-	for(var/prospective_indicator in status_indicators)
-		attached_mob.cut_overlay(prospective_indicator)
+	attached_mob.cut_overlay(status_indicators)
 
 /// Refreshes the indicators over a mob's head. Should only be called when adding or removing a status indicator with the above procs,
 /// or when the mob changes size visually for some reason.
@@ -192,12 +191,13 @@ GLOBAL_LIST_INIT(potential_indicators, list(
 
 		// This is a semi-HUD element, in a similar manner as medHUDs, in that they're 'above' everything else in the world,
 		// but don't pierce obfuscation layers such as blindness or darkness, unlike actual HUD elements like inventory slots.
-		indicator.plane = RENDER_PLANE_GAME
-		indicator.layer = STATUS_LAYER
+		indicator.layer = TYPING_LAYER
 		indicator.appearance_flags = PIXEL_SCALE|TILE_BOUND|NO_CLIENT_COLOR|RESET_COLOR|RESET_ALPHA|RESET_TRANSFORM|KEEP_APART
 		indicator.pixel_y = y_offset
 		indicator.pixel_x = current_x_position
-		my_carbon_mob.add_overlay(indicator)
+		my_carbon_mob.cut_overlay(indicator) // if case of race leftovers
+		if(!length(my_carbon_mob.overlays) => MAX_ATOM_OVERLAYS - 1)
+			my_carbon_mob.add_overlay(indicator)
 		// Adding the margin space every time saves a conditional check on the last iteration,
 		// and it won't cause any issues since no more icons will be added, and the var is not used for anything else.
 		current_x_position += STATUS_INDICATOR_ICON_X_SIZE + STATUS_INDICATOR_ICON_MARGIN
