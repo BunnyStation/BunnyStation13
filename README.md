@@ -1,4 +1,4 @@
-## Bunny Station (A Skyrat Downstream)
+## Bunny Station 13
 
 [![CI Suite]([https://github.com/BunnyStation/BunnyStation13/actions/workflows/ci_suite.yml/badge.svg)](https://github.com/BunnyStation/BunnyStation13/actions/workflows/ci_suite.yml))
 
