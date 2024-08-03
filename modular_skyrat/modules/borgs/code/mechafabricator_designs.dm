@@ -1,17 +1,3 @@
-/datum/design/borg_upgrade_shrink
-	name = "Shrink Module"
-	id = "borg_upgrade_shrink"
-	build_type = MECHFAB
-	build_path = /obj/item/borg/upgrade/shrink
-	materials = list(
-		/datum/material/iron = SHEET_MATERIAL_AMOUNT * 10,
-		/datum/material/glass = SHEET_MATERIAL_AMOUNT * 4,
-	)
-	construction_time = 120
-	category = list(
-		RND_CATEGORY_MECHFAB_CYBORG_MODULES + RND_SUBCATEGORY_MECHFAB_CYBORG_MODULES_ALL,
-	)
-
 /datum/design/borg_upgrade_surgicaltools
 	name = "Advanced Surgical Tools Module"
 	id = "borg_upgrade_surgicaltools"
@@ -29,20 +15,6 @@
 	construction_time = 80
 	category = list(
 		RND_CATEGORY_MECHFAB_CYBORG_MODULES + RND_SUBCATEGORY_MECHFAB_CYBORG_MODULES_MEDICAL,
-	)
-
-/datum/design/affection_module
-	name = "Affection Module"
-	id = "affection_module"
-	build_type = MECHFAB
-	build_path = /obj/item/borg/upgrade/affectionmodule
-	materials = list(
-		/datum/material/iron = HALF_SHEET_MATERIAL_AMOUNT,
-		/datum/material/glass = HALF_SHEET_MATERIAL_AMOUNT,
-	)
-	construction_time = 40
-	category = list(
-		RND_CATEGORY_MECHFAB_CYBORG_MODULES + RND_SUBCATEGORY_MECHFAB_CYBORG_MODULES_ALL,
 	)
 
 /datum/design/advanced_materials
