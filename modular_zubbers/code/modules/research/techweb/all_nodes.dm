@@ -61,7 +61,6 @@
 /datum/techweb_node/borg_medical/New()
 	design_ids += list(
 		"borg_upgrade_surgicalprocessor_sci",
-		"borg_upgrade_pinpointer",
 	)
 	return ..()
 
@@ -69,7 +68,6 @@
 	. = ..()
 	design_ids += list(
 		"blanksynth",
-		"dominatrixmodule",
 	)
 
 // Computer Tech

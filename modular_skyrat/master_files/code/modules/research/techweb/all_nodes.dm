@@ -62,7 +62,6 @@
 
 /datum/techweb_node/augmentation/New()
 	design_ids += list(
-		"affection_module",
 		"borg_upgrade_artistic",
 	)
 	return ..()
@@ -275,7 +274,6 @@
 		"borg_upgrade_cargo_tele",
 		"borg_upgrade_forging",
 		"borg_upgrade_brush",
-		"borg_upgrade_shrink",
 	)
 	return ..()
 

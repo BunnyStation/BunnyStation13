@@ -7,13 +7,12 @@
 	AddComponent(/datum/component/tippable, \
 		tip_time = 3 SECONDS, \
 		untip_time = 2 SECONDS, \
-		self_right_time = 20 SECONDS, \
+		self_right_time = 60 SECONDS, \
 		post_tipped_callback = CALLBACK(src, PROC_REF(after_tip_over)), \
 		post_untipped_callback = CALLBACK(src, PROC_REF(after_righted)), \
 		roleplay_friendly = TRUE, \
 		roleplay_emotes = list(/datum/emote/silicon/buzz, /datum/emote/silicon/buzz2, /datum/emote/silicon/beep, /datum/emote/silicon/beep2), /* SKYRAT EDIT CHANGE - ORIGINAL: roleplay_emotes = list(/datum/emote/silicon/buzz, /datum/emote/silicon/buzz2, /datum/emote/silicon/beep)*/ \
 		roleplay_callback = CALLBACK(src, PROC_REF(untip_roleplay)))
-		//BUBBER EDIT: REDUCES THE SELF-RIGHT TIME FOR BORGS TO 20 SECONDS, FROM 60 SECONDS
 
 	set_wires(new /datum/wires/robot(src))
 	AddElement(/datum/element/empprotection, EMP_PROTECT_WIRES)
@@ -724,12 +723,6 @@
 		hasExpanded = FALSE
 		//update_transform(0.5) // Original
 		update_transform(0.8) // SKYRAT EDIT CHANGE
-
-	//SKYRAT EDIT ADDITION BEGIN - CYBORG
-	if (hasShrunk)
-		hasShrunk = FALSE
-		update_transform(4/3)
-	//SKYRAT EDIT ADDITION END
 
 	logevent("Chassis model has been reset.")
 	log_silicon("CYBORG: [key_name(src)] has reset their cyborg model.")
