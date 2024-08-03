@@ -11,7 +11,6 @@
 | Website                   | TBA |
 | Code                      | https://github.com/BunnyStation/BunnyStation13 |
 | Wiki                      | TBD |
-| Bubberstation Discord     | https://discord.gg/pEWFrVuz |
 | Coderbus Discord          | [https://discord.gg/Vh8TJp9](https://discord.gg/Vh8TJp9) |
 
 This is Bunny Station's downstream fork of Skyrat, which is in turn a fork of tgstation.
