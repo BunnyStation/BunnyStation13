@@ -772,54 +772,6 @@
 		to_chat(user, span_danger("Your chameleon field deactivates."))
 		deactivate(user)
 
-// Quadruped tongue - lick lick
-/obj/item/quadborg_tongue
-	name = "synthetic tongue"
-	desc = "Useful for slurping mess off the floor before affectionally licking the crew members in the face."
-	icon = 'modular_skyrat/modules/borgs/icons/robot_items.dmi'
-	icon_state = "synthtongue"
-	hitsound = 'sound/effects/attackblob.ogg'
-	desc = "For giving affectionate kisses."
-	item_flags = NOBLUDGEON
-
-/obj/item/quadborg_tongue/interact_with_atom(atom/target, mob/living/user, list/modifiers)
-	if(!isliving(target))
-		return NONE
-
-	var/mob/living/silicon/robot/borg = user
-	var/mob/living/mob = target
-
-	if(!HAS_TRAIT(target, TRAIT_AFFECTION_AVERSION)) // Checks for Affection Aversion trait
-		if(check_zone(borg.zone_selected) == "head")
-			borg.visible_message(span_warning("\the [borg] affectionally licks \the [mob]'s face!"), span_notice("You affectionally lick \the [mob]'s face!"))
-			playsound(borg, 'sound/effects/attackblob.ogg', 50, 1)
-		else
-			borg.visible_message(span_warning("\the [borg] affectionally licks \the [mob]!"), span_notice("You affectionally lick \the [mob]!"))
-			playsound(borg, 'sound/effects/attackblob.ogg', 50, 1)
-		return ITEM_INTERACT_SUCCESS
-	else
-		to_chat(user, span_warning("ERROR: [target] is on the Do Not Lick registry!"))
-		return ITEM_INTERACT_BLOCKING
-
-// Quadruped nose - Boop
-/obj/item/quadborg_nose
-	name = "boop module"
-	desc = "The BOOP module"
-	icon = 'modular_skyrat/modules/borgs/icons/robot_items.dmi'
-	icon_state = "nose"
-	obj_flags = CONDUCTS_ELECTRICITY
-	item_flags = NOBLUDGEON
-	force = 0
-
-/obj/item/quadborg_nose/interact_with_atom(atom/target, mob/living/user, list/modifiers)
-	if(!HAS_TRAIT(target, TRAIT_AFFECTION_AVERSION)) // Checks for Affection Aversion trait
-		do_attack_animation(target, null, src)
-		user.visible_message(span_notice("[user] [pick("nuzzles", "pushes", "boops")] \the [target.name] with their nose!"))
-		return ITEM_INTERACT_SUCCESS
-	else
-		to_chat(user, span_warning("ERROR: [target] is on the No Nosing registry!"))
-		return ITEM_INTERACT_BLOCKING
-
 /// Better Clamp
 /obj/item/borg/hydraulic_clamp/better
 	name = "improved integrated hydraulic clamp"
