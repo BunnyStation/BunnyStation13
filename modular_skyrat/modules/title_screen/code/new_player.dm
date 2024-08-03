@@ -92,6 +92,11 @@
 		title_screen_is_ready = TRUE
 		return
 
+	// EffigyEdit Addition Start - TM ONLY - EFFIGY PROMO
+	if(href_list["effigy_link"])
+		client << link("https://effigy.se/bubberstation-invite/")
+	// EffigyEdit Addition End - TM ONLY - EFFIGY PROMO
+
 
 /mob/dead/new_player/Login()
 	. = ..()
@@ -118,7 +123,11 @@
 /mob/dead/new_player/proc/update_title_screen()
 	var/dat = get_title_html()
 
-	src << browse(SStitle.current_title_screen, "file=loading_screen.gif;display=0")
+	if(GLOB.effigy_promo)
+		src << browse(SStitle.current_title_screen, "file=title-x3.png;display=0")
+	else
+		src << browse(SStitle.current_title_screen, "file=loading_screen.gif;display=0")
+
 	src << browse(dat, "window=title_browser")
 
 /datum/asset/simple/lobby

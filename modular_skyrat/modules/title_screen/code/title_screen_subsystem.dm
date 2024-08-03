@@ -27,36 +27,49 @@ SUBSYSTEM_DEF(title)
 	var/list/available_lobby_station_traits = list()
 
 /datum/controller/subsystem/title/Initialize()
-	var/dat
-	if(!fexists("[global.config.directory]/bubbers/bubbers_title.txt")) // BUBBER EDIT - original title_html.txt
-		to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read bubbers_title.txt, reverting to backup title html, please check your server config and ensure this file exists.")) // BUBBER EDIT - original title_html.txt
-		dat = DEFAULT_TITLE_HTML
-	else
-		dat = file2text("[global.config.directory]/bubbers/bubbers_title.txt") // BUBBER EDIT - original title_html.txt
+	switch(SSmapping.config.map_name)
+		if("Effigy Sigma Octantis")
+			GLOB.effigy_promo = TRUE
+		if("Effigy RimPoint")
+			GLOB.effigy_promo = TRUE
 
-	title_html = dat
+	if(GLOB.effigy_promo)
+		title_html = EFFIGY_TEMP_HTML
+	else
+		var/dat
+		if(!fexists("[global.config.directory]/bubbers/bubbers_title.txt")) // BUBBER EDIT - original title_html.txt
+			to_chat(world, span_boldwarning("CRITICAL ERROR: Unable to read bubbers_title.txt, reverting to backup title html, please check your server config and ensure this file exists.")) // BUBBER EDIT - original title_html.txt
+			dat = DEFAULT_TITLE_HTML
+		else
+			dat = file2text("[global.config.directory]/bubbers/bubbers_title.txt") // BUBBER EDIT - original title_html.txt
+
+		title_html = dat
 
 	var/list/provisional_title_screens = flist("[global.config.directory]/title_screens/images/")
 	var/list/local_title_screens = list()
 
-	for(var/screen in provisional_title_screens)
-		var/list/formatted_list = splittext(screen, "+")
-		if((LAZYLEN(formatted_list) == 1 && (formatted_list[1] != "exclude" && formatted_list[1] != "blank.png" && formatted_list[1] != "startup_splash")))
-			local_title_screens += screen
+	if(!GLOB.effigy_promo)
+		for(var/screen in provisional_title_screens)
+			var/list/formatted_list = splittext(screen, "+")
+			if((LAZYLEN(formatted_list) == 1 && (formatted_list[1] != "exclude" && formatted_list[1] != "blank.png" && formatted_list[1] != "startup_splash")))
+				local_title_screens += screen
 
-		if(LAZYLEN(formatted_list) > 1 && lowertext(formatted_list[1]) == "startup_splash")
-			var/file_path = "[global.config.directory]/title_screens/images/[screen]"
-			ASSERT(fexists(file_path))
-			startup_splash = new(fcopy_rsc(file_path))
+			if(LAZYLEN(formatted_list) > 1 && lowertext(formatted_list[1]) == "startup_splash")
+				var/file_path = "[global.config.directory]/title_screens/images/[screen]"
+				ASSERT(fexists(file_path))
+				startup_splash = new(fcopy_rsc(file_path))
 
 	// Progress stuff
 	check_progress_reference_time()
 	load_progress_json()
 
-	if(startup_splash)
-		change_title_screen(startup_splash)
+	if(GLOB.effigy_promo)
+		change_title_screen(EFFIGY_TEMP_LOADING_SCREEN)
 	else
-		change_title_screen(DEFAULT_TITLE_LOADING_SCREEN)
+		if(startup_splash)
+			change_title_screen(startup_splash)
+		else
+			change_title_screen(DEFAULT_TITLE_LOADING_SCREEN)
 
 	if(length(local_title_screens))
 		for(var/i in local_title_screens)
@@ -165,6 +178,8 @@ SUBSYSTEM_DEF(title)
 	else
 		if(LAZYLEN(title_screens))
 			current_title_screen = pick(title_screens)
+		else if(GLOB.effigy_promo)
+			current_title_screen = PROMO_TEMP_TITLE_SCREEN
 		else
 			current_title_screen = DEFAULT_TITLE_SCREEN_IMAGE
 
@@ -200,6 +215,14 @@ SUBSYSTEM_DEF(title)
 	var/msg_key = msg_key_regex.Replace(msg, "#")
 
 	GLOB.startup_messages += msg_html
+
+	// EffigyEdit Addition Start - TM ONLY - EFFIGY PROMO
+	// Effigy fluff text, if available
+	var/fluff_message
+	if(GLOB.effigy_promo)
+		fluff_message = pick(GLOB.effigy_fluff)
+		msg_html = {"<p class="terminal_text">[fluff_message]</p>"}
+	// EffigyEdit Addition End - TM ONLY - EFFIGY PROMO
 
 	// If we ran before SStitle initialized, set the ref time now.
 	SStitle.check_progress_reference_time()

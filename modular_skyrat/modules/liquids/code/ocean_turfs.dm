@@ -1,3 +1,9 @@
+/// HEY!! LISTEN!!
+/// Not every turf works ATM thanks to some issue we're having trouble identifying. The follow turfs have this issue when making an ocean subtype:
+/// /turf/open/floor/glass, /turf/open/floor/mineral/plastitanium
+/// This does not, oddly, seems to affect some subtypes?
+/// If you implement these, please try and help uncover what's wrong!
+
 /turf/open/openspace/ocean
 	name = "ocean"
 	planetary_atmos = TRUE
@@ -54,7 +60,7 @@
 	name = "rock"
 	desc = "Polished over centuries of undersea weather conditions and a distinct lack of light."
 	baseturfs = /turf/open/misc/ocean/rock
-	icon = 'modular_skyrat/modules/liquids/icons/turf/seafloor.dmi'
+	icon = 'local/code/modules/liquids/assets/turf/seafloor.dmi'
 	icon_state = "seafloor"
 	base_icon_state = "seafloor"
 	rand_variants = 0
@@ -65,7 +71,7 @@
 /turf/open/misc/ocean/rock/warm/fissure
 	name = "fissure"
 	desc = "A comfortable, warm tempature eminates from these - followed immediately after by toxic chemicals in liquid or gaseous forms; but warmth all the same!"
-	icon = 'modular_skyrat/modules/liquids/icons/turf/fissure.dmi'
+	icon = 'local/code/modules/liquids/assets/turf/fissure.dmi'
 	icon_state = "fissure-0"
 	base_icon_state = "fissure"
 	smoothing_flags = SMOOTH_BITMASK
@@ -149,6 +155,22 @@
 	baseturfs = /turf/open/floor/plating/ocean_plating
 
 /turf/open/floor/iron/solarpanel/ocean/Initialize(mapload)
+	. = ..()
+	if(liquids)
+		if(liquids.immutable)
+			liquids.remove_turf(src)
+		else
+			qdel(liquids, TRUE)
+	var/obj/effect/abstract/liquid_turf/immutable/new_immmutable = SSliquids.get_immutable(/obj/effect/abstract/liquid_turf/immutable/ocean, src)
+	new_immmutable.add_turf(src)
+
+/turf/open/floor/engine/hull/ocean
+	initial_gas_mix = OPENTURF_DEFAULT_ATMOS
+	temperature = T20C
+	planetary_atmos = TRUE
+	baseturfs = /turf/open/misc/ocean
+
+/turf/open/floor/engine/hull/ocean/Initialize(mapload)
 	. = ..()
 	if(liquids)
 		if(liquids.immutable)
@@ -312,9 +334,10 @@
 /turf/open/floor/iron/submarine_perf/airless
 	initial_gas_mix = AIRLESS_ATMOS
 
+
 /turf/open/floor/iron/submarine_perf/rust_heretic_act()
 	return
 
-//For now just a titanium wall. I'll make sprites for it later
+//For now just a titanium wall. I'll make sprites for it later /// They did not, in fact, make sprites for it later
 /turf/closed/wall/mineral/titanium/submarine
 	name = "submarine wall"
